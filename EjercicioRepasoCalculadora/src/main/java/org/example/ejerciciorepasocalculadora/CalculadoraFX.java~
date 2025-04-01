@@ -1,0 +1,78 @@
+// Pablo Nicolás Siles Arano
+// 
+
+package org.example.ejerciciorepasocalculadora;
+
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+public class CalculadoraFX extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Componentes
+        TextField txtNum1 = new TextField();
+        TextField txtNum2 = new TextField();
+        Label lblResultado = new Label("Resultado: ");
+
+        Button btnSuma = new Button("+");
+        Button btnResta = new Button("-");
+        Button btnMultiplica = new Button("*");
+        Button btnDivide = new Button("/");
+
+        // Contenedor
+        HBox hbox = new HBox(10, txtNum1, txtNum2);
+        hbox.setAlignment(Pos.CENTER);
+
+        HBox botones = new HBox(10, btnSuma, btnResta, btnMultiplica, btnDivide);
+        botones.setAlignment(Pos.CENTER);
+
+        VBox root = new VBox(10, hbox, botones, lblResultado);
+        root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-padding: 20px;");
+
+        // Eventos
+        btnSuma.setOnAction(e -> calcular(txtNum1, txtNum2, lblResultado, "+"));
+        btnResta.setOnAction(e -> calcular(txtNum1, txtNum2, lblResultado, "-"));
+        btnMultiplica.setOnAction(e -> calcular(txtNum1, txtNum2, lblResultado, "*"));
+        btnDivide.setOnAction(e -> calcular(txtNum1, txtNum2, lblResultado, "/"));
+
+        // Escena
+        Scene scene = new Scene(root, 300, 200);
+        primaryStage.setTitle("Calculadora FX");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void calcular(TextField txt1, TextField txt2, Label lbl, String operacion) {
+        try {
+            double num1 = Double.parseDouble(txt1.getText());
+            double num2 = Double.parseDouble(txt2.getText());
+            double resultado = 0;
+
+            switch (operacion) {
+                case "+": resultado = num1 + num2; break;
+                case "-": resultado = num1 - num2; break;
+                case "*": resultado = num1 * num2; break;
+                case "/":
+                    if (num2 == 0) {
+                        lbl.setText("Error: División por cero");
+                        return;
+                    }
+                    resultado = num1 / num2;
+                    break;
+            }
+            lbl.setText("Resultado: " + resultado);
+        } catch (NumberFormatException e) {
+            lbl.setText("Error: Ingresa números válidos");
+        }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
